@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+
+   parameters {
+    string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch to build')
+    string(name: 'IMAGE_NAME', defaultValue: 'tchuinsu/login-page-app', description: 'Full Docker image name')
+}
+
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: "*/${params.BRANCH_NAME}"]],
+                    userRemoteConfigs: [[
+                        url: 'git@github.com:tchuinsu/nex-index-project.git',
+                        credentialsId: 'github-auth'
+                    ]]
+                ])
+            }
+        }
+
+        stage('Check Code') {
+            steps {
+                sh 'ls -l'
+            }
+        }
+
+        stage('Build Docker Image') {
+    steps {
+        sh "docker build -t ${params.IMAGE_NAME} ."
+        sh "docker images | grep ${params.IMAGE_NAME}"
+    }
+}
+
+
+        stage('Login and Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-hub-creds',
+                    usernameVariable: 'DOCKER_USERNAME',
+                    passwordVariable: 'DOCKER_PASSWORD'
+                )]) {
+                    sh """
+                        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+                        docker push ${params.IMAGE_NAME}
+                    """
+                }
+            }
+        }
+
+         stage('Run Container') {
+    steps {
+        sh """
+            docker rm -f login-app || true
+            docker run -d -p 8080:80 --name login-app ${params.IMAGE_NAME}
+        """
+    }
+}
+    }
+
+     post {
+         always {
+             echo 'Build complete. Visit http://<your-server-ip>:8080 to view the app.'
+         }
+     }
+}
