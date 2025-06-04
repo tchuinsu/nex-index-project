@@ -3,7 +3,7 @@ pipeline {
 
    parameters {
     string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch to build')
-    string(name: 'IMAGE_NAME', defaultValue: 'tchuinsu/login-page-app', description: 'Full Docker image name')
+    string(name: 'IMAGE_NAME', defaultValue: 'tchuinsu/hello-html-app', description: 'Full Docker image name')
 }
 
 
