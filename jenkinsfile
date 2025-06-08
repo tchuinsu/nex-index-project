@@ -32,28 +32,28 @@ pipeline {
                 }
             }
         }
-       // stage('Building application 01') {
-       //     steps {
-       //         script {
-       //             sh """
-       //                 docker build -t ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_01_REPO}:${params.APP1_TAG} .
-       //                 docker images |grep ${params.APP1_TAG}
-       //             """ 
-       //         }
-       //     }
-       // }
-       // stage('Building application 02') {
-       //     steps {
-       //         script {
-       //             sh """
-       //                 pwd
-       //                 ls -l
-       //                 docker build -t "${env.DOCKER_HUB_USERNAME}"/"${env.ALPHA_APPLICATION_02_REPO}":"${params.APP2_TAG}" -f application-02.Dockerfile .
-       //                 docker images |grep ${params.APP2_TAG}
-       //             """ 
-       //         }
-       //     }
-       // }
+        stage('Building application 01') {
+            steps {
+                script {
+                    sh """
+                        docker build -t ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_01_REPO}:${params.APP1_TAG} .
+                        docker images |grep ${params.APP1_TAG}
+                    """ 
+                }
+            }
+        }
+        stage('Building application 02') {
+            steps {
+                script {
+                    sh """
+                        pwd
+                        ls -l
+                        docker build -t "${env.DOCKER_HUB_USERNAME}"/"${env.ALPHA_APPLICATION_02_REPO}":"${params.APP2_TAG}" -f application-02.Dockerfile .
+                        docker images |grep ${params.APP2_TAG}
+                    """ 
+                }
+            }
+        }
        // stage('Login into') {
        //     steps {
        //         script {
