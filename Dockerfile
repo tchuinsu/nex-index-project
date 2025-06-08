@@ -6,7 +6,7 @@ LABEL maintainer="coubis"
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Set working directory
-#WORKDIR /var/www/html
+WORKDIR /var/www/html
 
 # Install Apache
 RUN apt-get update && \
