@@ -11,7 +11,7 @@ pipeline {
     string(name: 'APP1_TAG', defaultValue: 'latest', description: '')
     string(name: 'APP2_TAG', defaultValue: 'latest', description: '')
     string(name: 'PORT_ON_DOCKER_HOST_APP_1', defaultValue: '8081', description: 'Port for App 01')
-    //string(name: 'PORT_ON_DOCKER_HOST_APP_2', defaultValue: '8082', description: 'Port for App 02')
+    string(name: 'PORT_ON_DOCKER_HOST_APP_2', defaultValue: '8082', description: 'Port for App 02')
 }
 
     stages {
@@ -43,18 +43,18 @@ pipeline {
                 }
             }
         }
-        //stage('Building application 02') {
-        //    steps {
-        //        script {
-        //            sh """
-        //                pwd
-        //                ls -l
-        //                docker build -t "${env.DOCKER_HUB_USERNAME}"/"${env.ALPHA_APPLICATION_02_REPO}":"${params.APP2_TAG}" -f application-02.Dockerfile .
-        //                docker images |grep ${params.APP2_TAG}
-        //            """ 
-        //        }
-        //    }
-        //}
+        stage('Building application 02') {
+            steps {
+                script {
+                    sh """
+                        pwd
+                        ls -l
+                        docker build -t "${env.DOCKER_HUB_USERNAME}"/"${env.ALPHA_APPLICATION_02_REPO}":"${params.APP2_TAG}" -f application-02.Dockerfile .
+                        docker images |grep ${params.APP2_TAG}
+                    """ 
+                }
+            }
+        }
         stage('Login into') {
             steps {
                 script {
@@ -77,15 +77,15 @@ pipeline {
                 }
             }
         }
-        //stage('Pushing application 02 into DockerHub') {
-        //    steps {
-        //        script {
-        //            sh """
-        //                docker push ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_02_REPO}:${params.APP2_TAG}
-        //            """
-        //        }
-        //    }
-        //}
+        stage('Pushing application 02 into DockerHub') {
+            steps {
+                script {
+                    sh """
+                        docker push ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_02_REPO}:${params.APP2_TAG}
+                    """
+                }
+            }
+        }
         stage('Deploying the application 01') {
             steps {
                 script {
@@ -97,16 +97,16 @@ pipeline {
                 }
             }
         }
-        //stage('Deploying the application 02') {
-        //    steps {
-        //        script {
-        //            sh """
-        //                docker run -itd -p ${params.PORT_ON_DOCKER_HOST_APP_2}:80  ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_02_REPO}:${params.APP2_TAG}
-        //                sleep 5
-        //                docker ps 
-        //            """ 
-        //        }
-        //    }
-        //}
+        stage('Deploying the application 02') {
+            steps {
+                script {
+                    sh """
+                        docker run -itd -p ${params.PORT_ON_DOCKER_HOST_APP_2}:80  ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_02_REPO}:${params.APP2_TAG}
+                        sleep 5
+                        docker ps 
+                    """ 
+                }
+            }
+        }
     }
 }
