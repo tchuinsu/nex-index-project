@@ -11,7 +11,7 @@ pipeline {
     string(name: 'APP1_TAG', defaultValue: 'latest', description: '')
     string(name: 'APP2_TAG', defaultValue: 'latest', description: '')
     string(name: 'PORT_ON_DOCKER_HOST_APP_1', defaultValue: '8081', description: 'Port for App 01')
-    string(name: 'PORT_ON_DOCKER_HOST_APP_2', defaultValue: '8082', description: 'Port for App 02')
+    //string(name: 'PORT_ON_DOCKER_HOST_APP_2', defaultValue: '8082', description: 'Port for App 02')
 }
 
     stages {
