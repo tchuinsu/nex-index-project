@@ -37,6 +37,8 @@ pipeline {
             steps {
                 script {
                     sh """
+                        pwd
+                        ls -l
                         docker build -t ${env.DOCKER_HUB_USERNAME}/${env.ALPHA_APPLICATION_01_REPO}:${params.APP1_TAG} .
                         docker images |grep ${params.APP1_TAG}
                     """ 
